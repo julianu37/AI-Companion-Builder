@@ -1,0 +1,10 @@
+# Local machine paths (copy Environment.props.example to Environment.props)
+Environment.props
+
+# Build output
+bin/
+obj/
+pkg/
+
+# Release staging
+*.zip

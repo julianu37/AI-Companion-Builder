@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Configuracao LOCAL desta maquina (ignorada pelo git). Copie para Environment.props e ajuste os caminhos. -->
+<Project>
+  <PropertyGroup>
+    <!-- Pasta raiz do Valheim -->
+    <ValheimDir>C:\Program Files (x86)\Steam\steamapps\common\Valheim</ValheimDir>
+
+    <!-- Copia o CompanionBuilder.dll para uma subpasta de plugins apos cada build
+         (o BepInEx varre plugins recursivamente). -->
+    <DeployDir>$(ValheimDir)\BepInEx\plugins\AI-Companion-Builder</DeployDir>
+  </PropertyGroup>
+</Project>
