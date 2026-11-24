@@ -34,6 +34,8 @@ public class BuilderPlugin : BaseUnityPlugin
 
 	private static Harmony _harmony;
 
+	private readonly BuilderBridge _bridge = new BuilderBridge();
+
 	private void Awake()
 	{
 		Log = Logger;
@@ -43,6 +45,7 @@ public class BuilderPlugin : BaseUnityPlugin
 		{
 			_harmony.PatchAll(typeof(BuilderPlugin).Assembly);
 			Log.LogInfo(PluginName + " v" + PluginVersion + " loaded successfully! (" + _harmony.GetPatchedMethods().Count() + " methods patched)");
+			_bridge.Start();
 		}
 		catch (Exception ex)
 		{
@@ -52,6 +55,7 @@ public class BuilderPlugin : BaseUnityPlugin
 
 	private void OnDestroy()
 	{
+		_bridge.Stop();
 		if (_harmony != null)
 		{
 			_harmony.UnpatchSelf();

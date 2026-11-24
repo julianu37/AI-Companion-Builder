@@ -18,6 +18,10 @@ internal static class BuilderConfig
 
 	internal static ConfigEntry<bool> DebugLog;
 
+	internal static ConfigEntry<bool> DevBridge;
+
+	internal static ConfigEntry<int> DevBridgePort;
+
 	internal static void Init(string path)
 	{
 		File = new ConfigFile(path, saveOnInit: true);
@@ -39,6 +43,10 @@ internal static class BuilderConfig
 	{
 		Enabled = Bind(File, "Builder", "Enabled", true, "The builder works at all. Off = it loads, reads nothing and does nothing (the pieces and the panel stay silent).");
 		DebugLog = Bind(File, "Builder", "DebugLog", false, "Write the detailed build log (every decision, every retry) instead of only the summary.");
+		// 19/11/2026: the builder has its OWN bridge (port 47111) - the companion mod's is 47110. Each mod owns its
+		// port and its commands; a client connects to one or the other, never to a shared surface.
+		DevBridge = Bind(File, "Advanced", "DevBridge", false, "Development tool (MCP): runs a TCP loopback server for the builder. Off by default.");
+		DevBridgePort = Bind(File, "Advanced", "DevBridgePort", 47111, "Development tool (MCP): TCP port of the builder's DevBridge (loopback only). The companion mod uses 47110.");
 	}
 
 	private static ConfigEntry<T> Bind<T>(ConfigFile file, string section, string key, T value, string description)
