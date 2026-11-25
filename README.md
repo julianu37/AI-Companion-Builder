@@ -1,52 +1,68 @@
 # AI Companion Builder
 
-A **BepInEx 5 mod for Valheim 1.0** (C#, net472, Harmony): the **build half** of the AI Companions mod as a mod of its
-own — blueprint and template construction, with its own builder and its own identity.
+🌍 **English** · [Português](docs/README-pt.md) · [Español](docs/README-es.md) · [Français](docs/README-fr.md) · [Italiano](docs/README-it.md)
 
-It installs **side by side** with [AI Companions](https://github.com/julianu37/AI-Companions) and neither depends on
-the other: different GUID, different DLL, different config file. Removing one does not touch the other.
+A **BepInEx 5 mod for Valheim 1.0** that gives your companion the job of **building what you draw**.
+
+> **Status: foundation (0.1.0).** The plugin loads, has its own settings and its own DevBridge, and the build
+> knowledge from the AI Companions project has been moved here — the piece catalog, the blueprint reader, the
+> support and failure tables, the terrain rules. **The builder that places the pieces is the next step**; until it
+> lands, this mod loads and does nothing in the world.
+
+## What it is
 
 | | |
 |---|---|
 | GUID | `julianu37.AICompanionBuilder` |
 | DLL | `CompanionBuilder.dll` |
-| config | `BepInEx\config\AiCompanionBuilder.cfg` |
+| settings | `BepInEx\config\AiCompanionBuilder.cfg` |
 | plugin folder | `BepInEx\plugins\AI-Companion-Builder\` |
+| DevBridge | `127.0.0.1:47111` (off by default; the AI Companions mod uses 47110) |
 
-> **Status: foundation (0.1.0).** The plugin boots, loads its config and reports itself; the build pipeline arrives
-> file by file, each one proven before it is wired to anything.
+It installs **side by side** with [AI Companions](https://github.com/julianu37/AI-Companions) and neither depends on
+the other: a different GUID, a different DLL, a different settings file and a different DevBridge port. Removing one
+does not touch the other.
 
-## Setup
+## Install
+
+1. Install **BepInEx 5** in your Valheim folder.
+2. Copy `CompanionBuilder.dll` into `BepInEx\plugins\AI-Companion-Builder\`.
+3. Start the game once. The settings file appears at `BepInEx\config\AiCompanionBuilder.cfg`.
+4. Check `BepInEx\LogOutput.log` for `Loading [AI Companion Builder <version>]` and `loaded successfully!`.
+
+## Settings
+
+| Section | Key | Default | What it does |
+|---|---|---|---|
+| `Builder` | `Enabled` | `true` | The builder works at all. Off = it loads and does nothing |
+| `Builder` | `DebugLog` | `false` | Writes every decision and every retry, not only the summary |
+| `Advanced` | `DevBridge` | `false` | Runs the development bridge (loopback only) |
+| `Advanced` | `DevBridgePort` | `47111` | The port of that bridge |
+
+## Building from source
 
 `Environment.props` is **gitignored** — copy `Environment.props.example` to `Environment.props` and set `ValheimDir`
 (and `DeployDir` to copy the DLL into `BepInEx\plugins\AI-Companion-Builder` after every build). There is **no NuGet
-package for Valheim**: the game assemblies are referenced in place from `$(ValheimDir)\valheim_Data\Managed` and
+package for Valheim**: the game assemblies are read in place from `$(ValheimDir)\valheim_Data\Managed` and
 `$(ValheimDir)\BepInEx\core`.
 
-## Commands
-
 ```powershell
-# build (also DEPLOYS to the game folder — see the pitfall below)
+# build (also DEPLOYS to the game folder)
 dotnet build src/CompanionBuilder/CompanionBuilder.csproj -c Release
 
-# build without touching the install (worktree, agent, test)
+# build without touching the install
 dotnet build src/CompanionBuilder/CompanionBuilder.csproj -c Release -p:SkipDeploy=true
 ```
 
-## Pitfalls
+## Documentation
 
-- **The build deploys.** Plain `dotnet build` copies the DLL into the game folder. Use `-p:SkipDeploy=true` when you
-  must not touch the install.
-- **BepInEx loads the DLL at boot.** A build does not change a running game: close and reopen it, or you are measuring
-  the previous DLL.
-- **Two mods, two identities.** Never reuse the companion mod's GUID, its `HC_*` ZDO keys or its prefabs here — a
-  shared network identity across two DLLs is how "the same mod loaded twice" bugs start.
-- **Load check:** `BepInEx\LogOutput.log` must contain `Loading [AI Companion Builder <version>]` and
-  `loaded successfully!`.
+- **[README (5 languages)](docs/README-pt.md)** — the same page in Portuguese, Spanish, French and Italian
+- `docs/backlog-construcao.md` — the work queue, with the acceptance criteria of each item
+- `docs/plan-construcao.md` — the design of the autonomous build
+- `docs/re/building-notes.md` — the measured build runs, one section per run
+- `docs/re/ciclo-de-run-devbridge.md` — the procedure to measure a build in game
 
-## Where this came from
+## Credit
 
-The build code being ported lives in the AI Companions repository (`src/Companions/Jobs/MHR_Build.cs` and the
-`AI/Build*.cs` tables). The port keeps the parts that were measured there (blueprint parsing, the support/failure
-tables, the material maths) and writes a builder of its own — the companion's movement engine is not copied, because
-it belongs to the companion.
+Derived from [Offline Companions Reborn](https://github.com/MaddhattrRocks/Offline-Companions-Reborn) by ProfMags
+(MIT). See `NOTICE.md` and `THIRD_PARTY_NOTICES.md`.

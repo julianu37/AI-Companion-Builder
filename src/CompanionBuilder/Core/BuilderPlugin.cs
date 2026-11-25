@@ -14,9 +14,10 @@ namespace CompanionBuilder;
 /// companion prefabs are NOT reused: this mod brings its own builder, because sharing a network identity across two
 /// DLLs is what makes "two copies loaded" bugs.</para>
 ///
-/// <para><b>Status.</b> The plugin boots, loads its config and exposes <see cref="Log"/>; the build pipeline
-/// (blueprint parsing, planning, placement) arrives file by file, each one with its harness case in
-/// <c>tools/builder-check</c> before it is wired to anything.</para>
+/// <para><b>Status.</b> The plugin boots, loads its config and exposes <see cref="Log"/>. The build pipeline
+/// (blueprint parsing, planning, placement) arrives file by file; the pieces already ported live in <c>AI/</c> and
+/// nothing calls them yet. There is no harness for this mod still - the first one lands with the executor, because a
+/// check that cannot fail proves nothing.</para>
 /// </summary>
 [BepInPlugin(PluginGUID, PluginName, PluginVersion)]
 public class BuilderPlugin : BaseUnityPlugin
